@@ -1,4 +1,4 @@
-FROM php:8.1-cli
+FROM php:8.4-cli
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer install --no-dev --optimize-autoloader
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
 EXPOSE 8080
 
