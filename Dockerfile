@@ -17,5 +17,4 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader
 
 EXPOSE 8080
 
-# Les migrations seront exécutées au démarrage du conteneur
 CMD php bin/console doctrine:migrations:migrate --no-interaction && php -S 0.0.0.0:8080 -t public
