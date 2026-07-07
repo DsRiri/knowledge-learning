@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token('checkout') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Knowledge Learning{% endblock %}</title>
+    
+    <link rel="icon" href="{{ asset('images/Favicon.png') }}" sizes="32x32">
+    <link rel="icon" href="{{ asset('images/Favicon.png') }}" sizes="64x64">
+    <link rel="apple-touch-icon" href="{{ asset('images/Favicon.png') }}" sizes="180x180">
+    
+    <style>
+
+    /* ===== AUTH PAGES ===== */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 30px 0;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 24px;
+    padding: 45px 50px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 73, 124, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease;
+}
+
+.auth-card:hover {
+    transform: translateY(-5px);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.auth-icon {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.auth-header h2 {
+    font-size: 1.8em;
+    font-weight: 800;
+    color: #00497c;
+    margin: 0;
+}
+
+.auth-subtitle {
+    color: #6a7a8a;
+    font-size: 0.95em;
+    margin-top: 8px;
+    font-weight: 400;
+}
+
+.auth-form .form-group {
+    margin-bottom: 22px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: #384050;
+    font-size: 0.95em;
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #e8edf2;
+    border-radius: 12px;
+    font-size: 1em;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    background: #f8fafc;
+    color: #384050;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #0074c7;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(0, 116, 199, 0.1);
+}
+
+.form-control::placeholder {
+    color: #b0c0d0;
+}
+
+.password-hint {
+    margin-top: 6px;
+    color: #8899aa;
+}
+
+.password-hint small {
+    font-size: 0.8em;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.btn-register {
+    background: linear-gradient(135deg, #0074c7, #00497c);
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 116, 199, 0.3);
+    margin-top: 10px;
+}
+
+.btn-register:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 116, 199, 0.4);
+}
+
+.btn-login {
+    background: linear-gradient(135deg, #82b864, #6a9e50);
+    color: white;
+    box-shadow: 0 4px 20px rgba(130, 184, 100, 0.3);
+    margin-top: 10px;
+}
+
+.btn-login:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(130, 184, 100, 0.4);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #6a7a8a;
+    font-size: 0.95em;
+}
+
+.auth-footer a {
+    color: #0074c7;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.auth-footer a:hover {
+    color: #00497c;
+    text-decoration: underline;
+}
+
+.form-errors {
+    color: #cd2c2e;
+    font-size: 0.85em;
+    margin-top: 5px;
+    padding: 8px 12px;
+    background: #fde8e8;
+    border-radius: 8px;
+    list-style: none;
+}
+
+.form-errors li {
+    list-style: none;
+}
+
+.alert {
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+.alert-error {
+    background: #fde8e8;
+    color: #cd2c2e;
+    border: 1px solid #f5d0d0;
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 30px 25px;
+        margin: 0 15px;
+    }
+}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            background: #f1f8fc;
+            color: #384050;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px 30px; flex: 1; display: flex; flex-direction: column; }
+        main { flex: 1; }
+        
+        .header {
+            background: linear-gradient(135deg, #00497c 0%, #0074c7 100%);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 8px 30px rgba(0, 73, 124, 0.35);
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-left .logo { height: 50px; width: auto; }
+        .header h1 { font-size: 1.8em; font-weight: 800; }
+        .header h1 span { color: #82b864; }
+        
+        .nav { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .nav a { color: white; text-decoration: none; padding: 8px 18px; border-radius: 30px; transition: all 0.3s ease; font-size: 0.9em; font-weight: 500; }
+        .nav a:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+        .user-info { background: rgba(255,255,255,0.12); padding: 6px 16px; border-radius: 30px; font-size: 0.85em; }
+        .btn-nav-logout { background: #cd2c2e; }
+        .btn-nav-login { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); }
+        .btn-nav-register { background: #82b864; color: white; }
+        .btn-nav-register:hover { background: #6a9e50; transform: translateY(-2px); }
+        
+        .card { background: white; padding: 30px; border-radius: 20px; margin: 20px 0; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.04); }
+        .card h2 { font-size: 2em; font-weight: 700; color: #00497c; margin-bottom: 10px; }
+        .card p { color: #6a7a8a; font-size: 1.05em; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-top: 25px; }
+        
+        .theme-card {
+            background: linear-gradient(145deg, #00497c, #003b66);
+            color: white;
+            padding: 28px;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 25px rgba(0, 73, 124, 0.2);
+        }
+        .theme-card:hover { transform: translateY(-8px); box-shadow: 0 15px 45px rgba(0, 73, 124, 0.3); }
+        .theme-card h3 { font-size: 1.5em; font-weight: 700; margin-bottom: 8px; }
+        .theme-card .theme-desc { color: rgba(255,255,255,0.7); font-size: 0.9em; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px; }
+        .theme-card .course-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 15px; margin: 5px 0;
+            background: rgba(255,255,255,0.06); border-radius: 12px;
+            text-decoration: none; color: white; transition: all 0.3s ease; font-weight: 500;
+        }
+        .theme-card .course-item:hover { background: rgba(255,255,255,0.15); transform: translateX(5px); }
+        .theme-card .course-price { background: #82b864; padding: 3px 14px; border-radius: 30px; font-size: 0.8em; font-weight: 700; color: white; }
+        
+        .btn {
+            padding: 12px 28px; border: none; border-radius: 50px; cursor: pointer; text-decoration: none; display: inline-block;
+            font-weight: 600; font-size: 0.95em; transition: all 0.3s ease; font-family: inherit;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .btn-primary { background: #0074c7; color: white; }
+        .btn-primary:hover { background: #005fa0; }
+        
+        .footer { margin-top: auto; padding: 25px; text-align: center; color: #8899aa; font-size: 0.85em; border-top: 1px solid #e8edf2; background: transparent; }
+        .footer .footer-logo { font-weight: 700; color: #00497c; }
+        
+        .flash { padding: 15px 25px; border-radius: 15px; margin: 20px 0; font-weight: 500; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); animation: slideIn 0.5s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .flash-success { background: #82b864; color: white; }
+        .flash-error { background: #cd2c2e; color: white; }
+        .flash-warning { background: #f0ad4e; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <div class="header-left">
+            <img src="{{ asset('images/Logo.jpg') }}" alt="Knowledge Learning" class="logo">
+            <h1>Knowledge <span>Learning</span></h1>
+        </div>
+        <nav class="nav">
+            <a href="{{ path('app_home') }}">🏠 Accueil</a>
+            {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+                <a href="{{ path('app_admin_dashboard') }}" style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);">⚙️ Admin</a>
+            {% endif %}
+            {% if app.user %}
+                <a href="{{ path('app_certifications') }}">📜 Certifications</a>
+                <span class="user-info">👤 {{ app.user.email }}</span>
+                <a href="{{ path('app_logout') }}" class="btn btn-nav-logout">🚪 Déconnexion</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-nav-login">🔑 Connexion</a>
+                <a href="{{ path('app_register') }}" class="btn btn-nav-register">📝 Inscription</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash flash-{{ label }}">
+                {% if label == 'success' %}✅{% elseif label == 'error' %}❌{% else %}⚠️{% endif %}
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <main>{% block body %}{% endblock %}</main>
+
+    <footer class="footer">
+        &copy; {{ "now"|date("Y") }} <span class="footer-logo">Knowledge Learning</span> - Tous droits réservés
+    </footer>
+</div>
+
+<script>
+    function purchaseItem(type, id) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+        fetch('/checkout/' + type + '/' + id, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.checkout_url) { window.location.href = data.checkout_url; }
+            else if (data.error) { alert('❌ ' + data.error); }
+        })
+        .catch(error => { alert('❌ An error occurred. Please try again.'); console.error('Error:', error); });
+    }
+
+    function validateLesson(lessonId) {
+        const button = document.querySelector('.btn-validate');
+        if (button) { button.disabled = true; button.textContent = '⏳ Validation en cours...'; }
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+        fetch('/lesson/' + lessonId + '/validate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const messageDiv = document.getElementById('validation-message');
+                if (messageDiv) {
+                    messageDiv.style.display = 'block';
+                    messageDiv.style.padding = '20px';
+                    messageDiv.style.background = '#82b864';
+                    messageDiv.style.borderRadius = '15px';
+                    messageDiv.style.color = 'white';
+                    messageDiv.style.fontWeight = 'bold';
+                    messageDiv.innerHTML = '✅ ' + data.success;
+                }
+                setTimeout(() => { location.reload(); }, 2000);
+            } else if (data.error) {
+                alert('❌ ' + data.error);
+                if (button) { button.disabled = false; button.textContent = '✅ Valider cette leçon'; }
+            }
+        })
+        .catch(error => {
+            alert('❌ An error occurred. Please try again.');
+            console.error('Error:', error);
+            if (button) { button.disabled = false; button.textContent = '✅ Valider cette leçon'; }
+        });
+    }
+</script>
+</body>
+</html>

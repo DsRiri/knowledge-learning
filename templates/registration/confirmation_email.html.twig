@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm your email</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            background: #f1f8fc;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 50px 45px;
+            box-shadow: 0 20px 60px rgba(0, 73, 124, 0.12);
+            text-align: center;
+        }
+        .email-header { margin-bottom: 30px; }
+        .email-header .logo { font-size: 3em; margin-bottom: 10px; }
+        .email-header h1 { font-size: 1.8em; color: #00497c; font-weight: 800; margin: 0; }
+        .email-header h1 span { color: #82b864; }
+        .email-body { color: #384050; font-size: 1.05em; line-height: 1.7; }
+        .email-body p { margin: 15px 0; }
+        .btn-confirm {
+            display: inline-block;
+            padding: 16px 45px;
+            background: linear-gradient(135deg, #0074c7, #00497c);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin: 25px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 116, 199, 0.3);
+        }
+        .btn-confirm:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(0, 116, 199, 0.4); }
+        .email-footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e8edf2; color: #8899aa; font-size: 0.85em; }
+        .expire-note { background: #f8fafc; padding: 12px 20px; border-radius: 12px; color: #6a7a8a; font-size: 0.9em; display: inline-block; }
+        .link-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e8edf2;
+            word-break: break-all;
+            text-align: left;
+        }
+        .link-box a { color: #0074c7; text-decoration: none; font-size: 0.9em; }
+        .link-box a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="email-header">
+        <div class="logo">📚</div>
+        <h1>Knowledge <span>Learning</span></h1>
+    </div>
+
+    <div class="email-body">
+        <h2 style="color: #00497c; font-weight: 700;">Bonjour ! 👋</h2>
+        <p>Merci de vous être inscrit sur <strong>Knowledge Learning</strong>.</p>
+        <p>Pour activer votre compte, veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous :</p>
+
+        <a href="{{ signedUrl|raw }}" class="btn-confirm">✅ Confirmer mon email</a>
+
+        <div class="expire-note">
+            ⏰ Ce lien expirera dans <strong>1 heure</strong>.
+        </div>
+
+        <p style="margin-top: 20px; color: #6a7a8a; font-size: 0.95em;">
+            Si vous n'avez pas créé de compte, ignorez simplement cet email.
+        </p>
+
+        <div class="link-box">
+            <small>🔗 Si le bouton ne fonctionne pas, copiez ce lien :</small><br>
+            <a href="{{ signedUrl|raw }}" target="_blank">{{ signedUrl|raw }}</a>
+        </div>
+    </div>
+
+    <div class="email-footer">
+        <p>
+            &copy; 2026 <strong>Knowledge Learning</strong> - Tous droits réservés<br>
+            <small>Cet email a été envoyé automatiquement.</small>
+        </p>
+    </div>
+</div>
+</body>
+</html>

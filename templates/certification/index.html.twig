@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div style="text-align: center; margin-bottom: 40px;">
+    <h2 style="font-size: 2.5em; color: #00497c; font-weight: 800;">📜 Mes Certifications</h2>
+    <p style="color: #6a7a8a;">Retrouvez ici toutes les certifications obtenues sur Knowledge Learning.</p>
+</div>
+
+{% if certifications|length > 0 %}
+    <div class="grid">
+        {% for cert in certifications %}
+            <div style="background: linear-gradient(135deg, #00497c, #0074c7); color: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 8px 30px rgba(0, 73, 124, 0.25);">
+                <div style="font-size: 4em; margin-bottom: 15px;">🏆</div>
+                <h3 style="font-size: 1.5em; font-weight: 700;">{{ cert.course.title }}</h3>
+                <p style="color: rgba(255,255,255,0.8);">📚 Thème : {{ cert.course.theme.name }}</p>
+                <p style="color: rgba(255,255,255,0.7); margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 12px;">
+                    🗓️ Obtenue le : {{ cert.obtainedAt|date('d/m/Y') }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card" style="text-align: center; padding: 60px;">
+        <div style="font-size: 4em; margin-bottom: 20px;">📚</div>
+        <p style="font-size: 1.3em; color: #6a7a8a;">Vous n'avez pas encore de certification.</p>
+        <p style="color: #8899aa;">Suivez un cursus et validez toutes les leçons pour en obtenir une !</p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary" style="margin-top: 25px; padding: 14px 40px; font-size: 1.1em;">
+            🎯 Voir les cursus
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

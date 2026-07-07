@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div style="background: linear-gradient(135deg, #00497c, #0074c7); color: white; padding: 40px; border-radius: 20px; margin-bottom: 25px;">
+    <h1 style="font-size: 2.2em; font-weight: 800;">{{ course.title }}</h1>
+    <p>📚 Thème : {{ course.theme.name }}</p>
+    <div style="margin-top: 15px;">
+        <span style="background: #82b864; padding: 8px 25px; border-radius: 50px; font-size: 1.3em; font-weight: 700;">{{ course.price }} €</span>
+        <span style="margin-left: 15px; font-size: 0.9em; color: rgba(255,255,255,0.7);">Cursus complet</span>
+    </div>
+</div>
+
+{% if not app.user %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <p>🔒 Veuillez vous <a href="{{ path('app_login') }}" style="color: #0074c7; font-weight: 600;">connecter</a> ou vous <a href="{{ path('app_register') }}" style="color: #82b864; font-weight: 600;">inscrire</a> pour accéder à ce cursus.</p>
+    </div>
+{% elseif not hasAccess %}
+    <div class="card" style="text-align: center; padding: 35px; border: 2px dashed #82b864;">
+        <p>🔒 Vous n'avez pas encore accès à ce cursus.</p>
+        <button class="btn btn-primary" onclick="purchaseItem('course', {{ course.id }})" style="padding: 16px 40px; font-size: 1.2em;">
+            🛒 Acheter le cursus ({{ course.price }} €)
+        </button>
+    </div>
+{% else %}
+    <div style="background: #82b864; color: white; padding: 18px 28px; border-radius: 15px; font-weight: 700; font-size: 1.1em;">
+        ✅ Vous avez accès à ce cursus !
+    </div>
+{% endif %}
+
+<div class="card">
+    <h3>📖 Leçons du cursus</h3>
+    <ul style="list-style: none; padding: 0;">
+        {% for lesson in course.lessons|sort((a, b) => a.orderNumber <=> b.orderNumber) %}
+            <li style="padding: 16px 20px; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center;">
+                <a href="{{ path('app_lesson_show', {'id': lesson.id}) }}" style="color: #00497c; text-decoration: none; font-weight: 600;">
+                    Leçon {{ lesson.orderNumber }} : {{ lesson.title }}
+                </a>
+                <span style="background: #f1f8fc; padding: 4px 18px; border-radius: 30px; color: #00497c; font-weight: 700;">{{ lesson.price }} €</span>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<a href="{{ path('app_home') }}" class="btn btn-primary">← Retour à l'accueil</a>
+{% endblock %}

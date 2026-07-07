@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div style="text-align: center; margin-bottom: 40px;">
+    <h2 style="font-size: 2.5em; color: #00497c; font-weight: 800;">🎯 Bienvenue sur Knowledge Learning !</h2>
+    <p style="color: #6a7a8a; font-size: 1.1em;">Choisissez un thème ci-dessous pour commencer votre formation.</p>
+</div>
+
+<div class="grid">
+    {% for theme in themes %}
+        <div class="theme-card">
+            <h3>
+                {% if theme.name == 'Musique' %}🎵
+                {% elseif theme.name == 'Informatique' %}💻
+                {% elseif theme.name == 'Jardinage' %}🌱
+                {% elseif theme.name == 'Cuisine' %}🍳
+                {% else %}📘
+                {% endif %}
+                {{ theme.name }}
+            </h3>
+            <p class="theme-desc">{{ theme.description }}</p>
+            {% for course in theme.courses %}
+                <a href="{{ path('app_course_show', {'id': course.id}) }}" class="course-item">
+                    {{ course.title }}
+                    <span class="course-price">{{ course.price }} €</span>
+                </a>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

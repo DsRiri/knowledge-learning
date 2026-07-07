@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div style="background: linear-gradient(135deg, #0074c7, #005fa0); color: white; padding: 40px; border-radius: 20px; margin-bottom: 25px;">
+    <p style="font-size: 0.85em; color: rgba(255,255,255,0.6);">📚 Leçon {{ lesson.orderNumber }}</p>
+    <h1 style="font-size: 2.2em; font-weight: 800;">{{ lesson.title }}</h1>
+    <p>Cursus : <a href="{{ path('app_course_show', {'id': lesson.course.id}) }}" style="color: #82b864; text-decoration: underline;">{{ lesson.course.title }}</a></p>
+    <div style="margin-top: 15px;">
+        <span style="background: #f1f8fc; color: #00497c; padding: 8px 25px; border-radius: 50px; font-size: 1.3em; font-weight: 700;">{{ lesson.price }} €</span>
+        <span style="margin-left: 15px; font-size: 0.9em; color: rgba(255,255,255,0.7);">Leçon individuelle</span>
+    </div>
+</div>
+
+{% if not app.user %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <p>🔒 Veuillez vous <a href="{{ path('app_login') }}" style="color: #0074c7; font-weight: 600;">connecter</a> pour accéder à cette leçon.</p>
+    </div>
+{% elseif not hasAccess %}
+    <div class="card" style="text-align: center; padding: 35px; border: 2px dashed #0074c7;">
+        <p>🔒 Vous n'avez pas encore accès à cette leçon.</p>
+        <button class="btn btn-primary" onclick="purchaseItem('lesson', {{ lesson.id }})" style="padding: 16px 40px; font-size: 1.2em; background: linear-gradient(135deg, #0074c7, #00497c);">
+            🛒 Acheter la leçon ({{ lesson.price }} €)
+        </button>
+    </div>
+{% else %}
+    <div class="card">
+        <div style="background: #f8fafc; padding: 35px; border-radius: 20px; line-height: 1.9;">
+            <h3 style="color: #00497c;">📝 Contenu de la leçon</h3>
+            <p>{{ lesson.content|nl2br }}</p>
+        </div>
+
+        {% if not isValidated %}
+            <div style="text-align: center;">
+                <button class="btn btn-primary" onclick="validateLesson({{ lesson.id }})" style="padding: 14px 35px; font-size: 1.05em; background: linear-gradient(135deg, #0074c7, #00497c);">
+                    ✅ Valider cette leçon
+                </button>
+                <div id="validation-message" style="margin-top: 15px; display: none;"></div>
+            </div>
+        {% else %}
+            <div style="text-align: center; padding: 20px; background: #82b864; border-radius: 15px; color: white;">
+                ✅ Cette leçon a été validée ! Félicitations !
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
+
+<a href="{{ path('app_course_show', {'id': lesson.course.id}) }}" class="btn btn-primary">← Retour au cursus</a>
+{% endblock %}

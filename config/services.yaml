@@ -1,0 +1,23 @@
+parameters:
+    stripe.secret_key: 'sk_test_51TkSHURq3JJtgodQllZXEJ8l2IOGbUfbqAbfu2NvcpMV6kD6M1npBmmV2dUrJOl6kAMd2GkRleWVTMC1Y9WwTXrf00VzY3a32d'
+    stripe.public_key: 'pk_test_51TkSHURq3JJtgodQeSuL8AfJhGwJmM76jZDp1ffDOWZR5PxulyvVyL7cuaZmNmdqomwwkiLPpElVrQMfqRZCr3eO00Z87TzQIc'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    App\Service\StripeService:
+        arguments:
+            $stripeSecretKey: '%stripe.secret_key%'
