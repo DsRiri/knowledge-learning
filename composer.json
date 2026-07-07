@@ -58,16 +58,16 @@
         "symfony/polyfill-php84": "*"
     },
     "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
+    "auto-scripts": {
+        "cache:clear": "echo 'Skipping cache:clear on Railway'",
+        "assets:install %PUBLIC_DIR%": "echo 'Skipping assets:install on Railway'"
+    },
+    "post-install-cmd": [
+        "@auto-scripts"
+    ],
+    "post-update-cmd": [
+        "@auto-scripts"
+    ]
     },
     "conflict": {
         "symfony/symfony": "*"
