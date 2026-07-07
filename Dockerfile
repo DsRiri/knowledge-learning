@@ -20,5 +20,6 @@ RUN rm -f .env
 
 EXPOSE $PORT
 
-# Exécuter les migrations au démarrage
-CMD php bin/console doctrine:migrations:migrate --no-interaction && php -S 0.0.0.0:$PORT -t public
+# Version corrigée - exec form avec shell pour les commandes multiples
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["php bin/console doctrine:migrations:migrate --no-interaction && php -S 0.0.0.0:$PORT -t public"]
