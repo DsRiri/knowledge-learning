@@ -19,6 +19,7 @@ knowledge-learning/
 ├── docs/ # Documentation
 └── README.md # Guide d'installation
 
+text
 
 ---
 
@@ -29,6 +30,7 @@ knowledge-learning/
 #### Entités principales
 
 **1. User (Utilisateur)**
+
 | Champ            | Type         | Description          |
 |------------------|--------------|----------------------|
 | id               | INT          | Identifiant unique   |
@@ -42,6 +44,7 @@ knowledge-learning/
 | updated_at       | DATETIME     | Date de mise à jour  |
 
 **2. Role (Rôle)**
+
 | Champ      | Type        | Description         |
 |------------|-------------|---------------------|
 | id         | INT         | Identifiant unique  |
@@ -50,6 +53,7 @@ knowledge-learning/
 | updated_at | DATETIME    | Date de mise à jour |
 
 **3. Theme (Thème)**
+
 | Champ       | Type         | Description          |
 |-------------|--------------|----------------------|
 | id          | INT          | Identifiant unique   |
@@ -57,6 +61,7 @@ knowledge-learning/
 | description | TEXT         | Description du thème |
 
 **4. Course (Cursus)**
+
 | Champ       | Type          | Description        |
 |-------------|---------------|--------------------|
 | id          | INT           | Identifiant unique |
@@ -66,6 +71,7 @@ knowledge-learning/
 | theme_id    | INT (FK)      | Thème associé      |
 
 **5. Lesson (Leçon)**
+
 | Champ        | Type          | Description           |
 |--------------|---------------|-----------------------|
 | id           | INT           | Identifiant unique    |
@@ -77,6 +83,7 @@ knowledge-learning/
 | course_id    | INT (FK)      | Cursus associé        |
 
 **6. Purchase (Achat)**
+
 | Champ             | Type          | Description          |
 |-------------------|---------------|----------------------|
 | id                | INT           | Identifiant unique   |
@@ -88,6 +95,7 @@ knowledge-learning/
 | stripe_payment_id | VARCHAR(255)  | ID Stripe            |
 
 **7. UserLesson (Validation)**
+
 | Champ        | Type     | Description        |
 |--------------|----------|--------------------|
 | id           | INT      | Identifiant unique |
@@ -97,6 +105,7 @@ knowledge-learning/
 | validated_at | DATETIME | Date de validation |
 
 **8. Certification**
+
 | Champ       | Type     | Description        |
 |-------------|----------|--------------------|
 | id          | INT      | Identifiant unique |
@@ -183,11 +192,10 @@ knowledge-learning/
 
 ```bash
 vendor/bin/phpunit
-Résultat:
+Résultat :
 
 text
 OK (6 tests, 12 assertions)
-
 Routes principales
 Route	Controller	Description
 /	HomeController	Page d'accueil
@@ -219,85 +227,4 @@ Mailtrap	-	Email sandbox
 Conclusion
 Le projet Knowledge Learning est une plateforme e-learning/e-commerce complète qui répond à l'ensemble des fonctionnalités demandées dans le cahier des charges.
 
-text
 
----
-
-## 📁 ÉTAPE 6: METTRE À JOUR LE README.md
-
-```bash
-code README.md
-markdown
-# 📚 Knowledge Learning - Plateforme E-learning
-
-## Description
-Knowledge Learning est une plateforme e-learning/e-commerce développée avec Symfony 8.1.
-
-## Prérequis
-- PHP 8.1+
-- Composer
-- MySQL 8.0+
-- Symfony CLI
-- Compte Stripe (sandbox)
-- Compte Mailtrap
-
-## Installation
-
-```bash
-git clone https://github.com/DsRiri/knowledge-learning.git
-cd knowledge-learning
-composer install
-php bin/console doctrine:database:create
-php bin/console doctrine:schema:update --force
-php bin/console doctrine:fixtures:load
-symfony server:start
-Compte admin
-Email: admin@knowledge.com
-
-Mot de passe: Admin123!
-
-Fonctionnalités
-✅ Inscription et activation par email (Mailtrap)
-
-✅ Authentification sécurisée
-
-✅ Achat de cursus et leçons (Stripe)
-
-✅ Validation des leçons
-
-✅ Certifications automatiques
-
-✅ Interface responsive
-
-Tests
-bash
-vendor/bin/phpunit
-Technologies
-Symfony 8.1
-
-Doctrine ORM
-
-MySQL
-
-Twig
-
-Stripe API
-
-PHPUnit
-
-text
-
----
-
-## 📁 ÉTAPE 7: CRÉER LE DIAGRAMME DB (PNG)
-
-Va sur https://dbdiagram.io/d, crée le schéma et exporte en PNG dans `public/images/db_diagram.png`
-
----
-
-## 📁 ÉTAPE 8: GITHUB
-
-```bash
-git add .
-git commit -m "Documentation complete - Knowledge Learning"
-git push -u origin main

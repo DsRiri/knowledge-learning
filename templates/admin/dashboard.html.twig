@@ -3,56 +3,230 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block body %}
-<div style="margin-bottom: 30px;">
-    <h2 style="font-size: 2em; color: #00497c; font-weight: 800;">⚙️ Tableau de bord Admin</h2>
-    <p style="color: #6a7a8a;">Bienvenue dans l'interface d'administration</p>
+<style>
+    .admin-header {
+        margin-bottom: 25px;
+    }
+    .admin-header h2 {
+        font-size: 2em;
+        color: #00497c;
+        font-weight: 800;
+    }
+    .admin-header p {
+        color: #6a7a8a;
+    }
+
+    /* ===== STATS GRID ===== */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        color: white;
+        padding: 25px;
+        border-radius: 15px;
+        text-align: center;
+    }
+    .stat-card.blue { background: linear-gradient(135deg, #00497c, #0074c7); }
+    .stat-card.green { background: linear-gradient(135deg, #82b864, #6a9e50); }
+    .stat-card.orange { background: linear-gradient(135deg, #f0ad4e, #e08e0b); }
+
+    .stat-card .stat-icon { font-size: 2.5em; }
+    .stat-card .stat-number { font-size: 2em; font-weight: 800; }
+    .stat-card .stat-label { color: rgba(255,255,255,0.8); }
+
+    /* ===== USERS CARD ===== */
+    .users-card {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .users-card h3 {
+        color: #00497c;
+        margin-bottom: 15px;
+    }
+
+    /* ===== TABLE SCROLLABLE ===== */
+    .users-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        margin: 0 -25px;
+        padding: 0 25px;
+    }
+
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 500px;
+    }
+    .users-table thead tr {
+        background: #f1f8fc;
+        border-bottom: 2px solid #e8edf2;
+    }
+    .users-table th {
+        padding: 12px;
+        text-align: left;
+        white-space: nowrap;
+    }
+    .users-table td {
+        padding: 12px;
+        white-space: nowrap;
+    }
+    .users-table tbody tr {
+        border-bottom: 1px solid #e8edf2;
+    }
+
+    .badge {
+        color: white;
+        padding: 3px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        display: inline-block;
+    }
+    .badge-admin { background: #cd2c2e; }
+    .badge-client { background: #82b864; }
+
+    /* ===== TABLETTE ===== */
+    @media (max-width: 992px) {
+        .stats-grid {
+            gap: 12px;
+        }
+        .stat-card {
+            padding: 18px 12px;
+        }
+        .stat-card .stat-icon { font-size: 2em; }
+        .stat-card .stat-number { font-size: 1.6em; }
+        .stat-card .stat-label { font-size: 0.85em; }
+    }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 768px) {
+        .admin-header {
+            margin-bottom: 15px;
+        }
+        .admin-header h2 {
+            font-size: 1.3em;
+        }
+        .admin-header p {
+            font-size: 0.85em;
+        }
+
+        /* CARD UNA SOTTO L'ALTRA - COMPATTE */
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        .stat-card {
+            padding: 12px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+        }
+        .stat-card .stat-icon { 
+            font-size: 1.6em; 
+        }
+        .stat-card .stat-number { 
+            font-size: 1.4em; 
+        }
+        .stat-card .stat-label { 
+            font-size: 0.85em; 
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* USERS CARD */
+        .users-card {
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .users-card h3 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+        }
+
+        /* TABLE SCROLLABLE */
+        .users-table-wrapper {
+            margin: 0 -12px;
+            padding: 0 12px;
+        }
+        .users-table {
+            min-width: 450px;
+        }
+        .users-table th,
+        .users-table td {
+            padding: 6px 8px;
+            font-size: 0.75em;
+        }
+        .badge {
+            font-size: 0.65em;
+            padding: 2px 8px;
+        }
+        .btn {
+            padding: 8px 14px;
+            font-size: 0.8em;
+        }
+    }
+</style>
+
+<div class="admin-header">
+    <h2>⚙️ Tableau de bord Admin</h2>
+    <p>Bienvenue dans l'interface d'administration</p>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
-    <div style="background: linear-gradient(135deg, #00497c, #0074c7); color: white; padding: 25px; border-radius: 15px; text-align: center;">
-        <div style="font-size: 2.5em;">👥</div>
-        <div style="font-size: 2em; font-weight: 800;">{{ totalUsers }}</div>
-        <div style="color: rgba(255,255,255,0.8);">Utilisateurs</div>
+<div class="stats-grid">
+    <div class="stat-card blue">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number">{{ totalUsers }}</div>
+        <div class="stat-label">Utilisateurs</div>
     </div>
-    <div style="background: linear-gradient(135deg, #82b864, #6a9e50); color: white; padding: 25px; border-radius: 15px; text-align: center;">
-        <div style="font-size: 2.5em;">📚</div>
-        <div style="font-size: 2em; font-weight: 800;">{{ totalCourses }}</div>
-        <div style="color: rgba(255,255,255,0.8);">Cursus</div>
+    <div class="stat-card green">
+        <div class="stat-icon">📚</div>
+        <div class="stat-number">{{ totalCourses }}</div>
+        <div class="stat-label">Cursus</div>
     </div>
-    <div style="background: linear-gradient(135deg, #f0ad4e, #e08e0b); color: white; padding: 25px; border-radius: 15px; text-align: center;">
-        <div style="font-size: 2.5em;">🛒</div>
-        <div style="font-size: 2em; font-weight: 800;">{{ totalPurchases }}</div>
-        <div style="color: rgba(255,255,255,0.8);">Achats</div>
+    <div class="stat-card orange">
+        <div class="stat-icon">🛒</div>
+        <div class="stat-number">{{ totalPurchases }}</div>
+        <div class="stat-label">Achats</div>
     </div>
 </div>
 
-<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-    <h3 style="color: #00497c; margin-bottom: 15px;">📋 Derniers utilisateurs</h3>
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #f1f8fc; border-bottom: 2px solid #e8edf2;">
-                <th style="padding: 12px; text-align: left;">Email</th>
-                <th style="padding: 12px; text-align: left;">Rôle</th>
-                <th style="padding: 12px; text-align: left;">Activé</th>
-                <th style="padding: 12px; text-align: left;">Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in recentUsers %}
-                <tr style="border-bottom: 1px solid #e8edf2;">
-                    <td style="padding: 12px;">{{ user.email }}</td>
-                    <td style="padding: 12px;">
-                        <span style="background: {% if 'ROLE_ADMIN' in user.roles %} #cd2c2e {% else %} #82b864 {% endif %}; color: white; padding: 3px 12px; border-radius: 20px; font-size: 0.8em;">
-                            {{ user.roles|join(', ') }}
-                        </span>
-                    </td>
-                    <td style="padding: 12px;">{% if user.isActive %}✅{% else %}❌{% endif %}</td>
-                    <td style="padding: 12px;">{{ user.createdAt|date('d/m/Y H:i') }}</td>
+<div class="users-card">
+    <h3>📋 Derniers utilisateurs</h3>
+    <div class="users-table-wrapper">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Rôle</th>
+                    <th>Activé</th>
+                    <th>Date</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div style="margin-top: 20px;">
+            </thead>
+            <tbody>
+                {% for user in recentUsers %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="badge {% if 'ROLE_ADMIN' in user.roles %}badge-admin{% else %}badge-client{% endif %}">
+                                {{ user.roles|join(', ') }}
+                            </span>
+                        </td>
+                        <td>{% if user.isActive %}✅{% else %}❌{% endif %}</td>
+                        <td>{{ user.createdAt|date('d/m/Y H:i') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div style="margin-top: 15px;">
         <a href="{{ path('app_admin_users') }}" class="btn btn-primary">Voir tous les utilisateurs →</a>
     </div>
 </div>

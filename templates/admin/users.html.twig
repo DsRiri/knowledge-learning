@@ -1,52 +1,130 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin - Utilisateurs{% endblock %}
+{% block title %}Gestion des utilisateurs{% endblock %}
 
 {% block body %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-    <div>
-        <h2 style="font-size: 2em; color: #00497c; font-weight: 800;">👥 Gestion des utilisateurs</h2>
-        <p style="color: #6a7a8a;">Liste de tous les utilisateurs</p>
-    </div>
-    <a href="{{ path('app_admin_dashboard') }}" class="btn btn-primary">← Retour</a>
-</div>
+<style>
+    .users-page h2 {
+        font-size: 2em;
+        color: #00497c;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+    .users-page .card {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+    .users-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+    .users-table thead tr {
+        background: #f1f8fc;
+        border-bottom: 2px solid #e8edf2;
+    }
+    .users-table th {
+        padding: 12px;
+        text-align: left;
+        white-space: nowrap;
+    }
+    .users-table td {
+        padding: 12px;
+        white-space: nowrap;
+    }
+    .users-table tbody tr {
+        border-bottom: 1px solid #e8edf2;
+    }
+    .users-table tbody tr:hover {
+        background: #f8fafc;
+    }
+    .badge {
+        color: white;
+        padding: 3px 12px;
+        border-radius: 20px;
+        font-size: 0.8em;
+        display: inline-block;
+    }
+    .badge-admin { background: #cd2c2e; }
+    .badge-client { background: #82b864; }
 
-<div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow-x: auto;">
-    <table style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #f1f8fc; border-bottom: 2px solid #e8edf2;">
-                <th style="padding: 12px; text-align: left;">ID</th>
-                <th style="padding: 12px; text-align: left;">Email</th>
-                <th style="padding: 12px; text-align: left;">Rôle</th>
-                <th style="padding: 12px; text-align: left;">Activé</th>
-                <th style="padding: 12px; text-align: left;">Vérifié</th>
-                <th style="padding: 12px; text-align: left;">Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                <tr style="border-bottom: 1px solid #e8edf2;">
-                    <td style="padding: 12px;">{{ user.id }}</td>
-                    <td style="padding: 12px;">
-                        {{ user.email }}
-                        {% if 'ROLE_ADMIN' in user.roles %}
-                            <span style="background: #cd2c2e; color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.7em;">Admin</span>
-                        {% endif %}
-                    </td>
-                    <td style="padding: 12px;">
-                        <span style="background: {% if 'ROLE_ADMIN' in user.roles %} #cd2c2e {% else %} #82b864 {% endif %}; color: white; padding: 3px 12px; border-radius: 20px; font-size: 0.8em;">
-                            {{ user.roles|join(', ') }}
-                        </span>
-                    </td>
-                    <td style="padding: 12px;">{% if user.isActive %}✅{% else %}❌{% endif %}</td>
-                    <td style="padding: 12px;">{% if user.isVerified %}✅{% else %}⏳{% endif %}</td>
-                    <td style="padding: 12px;">{{ user.createdAt|date('d/m/Y H:i') }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e8edf2;">
-        <span style="color: #6a7a8a;">Total: <strong>{{ users|length }}</strong> utilisateur(s)</span>
+    /* ===== MOBILE ===== */
+    @media (max-width: 768px) {
+        .users-page h2 {
+            font-size: 1.3em;
+        }
+        .users-page .card {
+            padding: 10px;
+            border-radius: 12px;
+        }
+        .table-wrapper {
+            margin: 0 -10px;
+            padding: 0 10px;
+        }
+        .users-table {
+            min-width: 500px;
+        }
+        .users-table th,
+        .users-table td {
+            padding: 6px 5px;
+            font-size: 0.7em;
+        }
+        .badge {
+            font-size: 0.6em;
+            padding: 2px 6px;
+        }
+        .btn {
+            padding: 8px 14px;
+            font-size: 0.8em;
+        }
+    }
+</style>
+
+<div class="users-page">
+    <h2>👥 Gestion des utilisateurs</h2>
+
+    <div class="card">
+        <div class="table-wrapper">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Rôle</th>
+                        <th>Activé</th>
+                        <th>Vérifié</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <span class="badge {% if 'ROLE_ADMIN' in user.roles %}badge-admin{% else %}badge-client{% endif %}">
+                                    {{ user.roles|join(', ') }}
+                                </span>
+                            </td>
+                            <td>{% if user.isActive %}✅{% else %}❌{% endif %}</td>
+                            <td>{% if user.isVerified %}✅{% else %}❌{% endif %}</td>
+                            <td>{{ user.createdAt|date('d/m/Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top: 20px;">
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-primary">← Retour au tableau de bord</a>
+        </div>
     </div>
 </div>
 {% endblock %}
